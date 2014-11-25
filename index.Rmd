@@ -1,0 +1,70 @@
+---
+title       : Predicting NBA Team's Wins
+subtitle    : Developing Data Products Project
+author      : Tyler Crain
+job         : Coursera 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Introduction
+
+This application has been built to calculate the Pythagorean Wins an NBA team will have.
+
+- The concept was first developed by baseball statisticians and later used in basketball.
+- Pythagorean Wins calculate the approximate winning percentage a team should have based on their total points scored and total points allowed. 
+- The discrepancy between predicted wins and actual wins can be interpreted as "luck".
+
+--- .class 
+
+## Use for App
+
+This app is useful for the satistical minded basketball fan. Using this app you can see how many games your favorite team should have won. When armed with this knowledge they can see whether their team is over or under achiving, and from there figure out why this is the case. 
+
+The next slide will show how difference between predicted Pythagorean Wins and actual wins from the previous season. You can see the predicted wins are generally very close to the actual wins.
+
+--- .class 
+
+## 2013-2014 Predicted Wins vs. Actual Wins
+
+```{r, echo = FALSE}
+library(ggplot2)
+setwd("~/Coursera/Data_Science/Developing Data Products/Project/project")
+data <- read.csv("data.txt", header= TRUE)
+Actual <- c(38,25,44,43,48,33,49,36,29,51,54,56,57,27,50,54,15,40,34,37,59,23,19,48,54,28,62,48,25,44)
+data = data[-1,]
+data = data[-31,]
+data$Actual <- Actual
+names(data)[names(data)=="X.3"] <- "Predicted"
+
+pywins <- c(40,28,38,40,47,32,48,35,31,54,53,54,59,25,46,54,20,48,33,39,58,26,16,48,52,33,61,50,22,45)
+data$Predicted <- pywins
+
+plot <- ggplot(data, aes(x = X.1, y = Predicted, color = "Predicted")) + geom_point() +
+    xlab("Team") + 
+    ylab("Wins") + 
+    ggtitle("2013-2014 Predicted Wins vs. Actual Wins") +
+    scale_y_continuous(limits = c(15,65)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+```{r}
+
+plot + geom_point(aes(y=Actual, color = "Actual")) +
+    scale_color_discrete(name = "Type of Win")
+```
+
+
+--- .class 
+
+## Further info
+
+- The app can be found here: https://tylercrain.shinyapps.io/Project/
+
+- Where to find basketball data: http://www.basketball-reference.com/leagues/NBA_2015.html
+
+- A github repository with all code for the app and this slideshow : 
+https://github.com/TylerCrain/developing_data_products
